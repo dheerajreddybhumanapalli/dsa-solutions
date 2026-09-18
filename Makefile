@@ -6,19 +6,20 @@ BUILD_DIR := build
 SOLUTIONS := $(wildcard leetcode/*/solution.cpp)
 
 .PHONY: all clean help
-all: $(SOLUTIONS)
+all:
 	@mkdir -p $(BUILD_DIR)
 	@for f in $(SOLUTIONS); do \
 		id=$$(echo $$f | cut -d/ -f2 | cut -d- -f1); \
-		$(CXX) $(CXXFLAGS) $$f -o $(BUILD_DIR)/$$id || exit 1; \
+		$(CXX) $(CXXFLAGS) -DLOCAL $$f -o $(BUILD_DIR)/$$id || exit 1; \
 		echo "built $(BUILD_DIR)/$$id"; \
 	done
 
-# make 1520 -> builds leetcode/1520-*/solution.cpp to build/1520
-%: leetcode/%-*/solution.cpp
+%:
 	@mkdir -p $(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) $< -o $(BUILD_DIR)/$*
-	@echo "built $(BUILD_DIR)/$* -- run with ./$(BUILD_DIR)/$*"
+	@f=$$(ls -d leetcode/$*-*/solution.cpp leetcode/$*/solution.cpp 2>/dev/null | head -n 1); \
+	if [ -z "$$f" ]; then echo "no solution for id $* (looked in leetcode/$*/ and leetcode/$*-*/)"; exit 1; fi; \
+	$(CXX) $(CXXFLAGS) -DLOCAL $$f -o $(BUILD_DIR)/$* || exit 1; \
+	echo "built $(BUILD_DIR)/$* -- run with ./$(BUILD_DIR)/$*"
 
 clean:
 	rm -rf $(BUILD_DIR)/*

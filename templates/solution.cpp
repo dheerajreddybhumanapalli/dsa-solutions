@@ -9,7 +9,7 @@ public:
     // TODO: implement
 };
 
-#ifndef LEETCODE_JUDGE
+#ifdef LOCAL
 int main() {
     Solution sol;
     // TODO: minimal demo / asserts

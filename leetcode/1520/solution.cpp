@@ -80,9 +80,14 @@ public:
     }
 };
 
+#ifdef LOCAL
 int main(){
     string s = "adefaddaccc";
     Solution soln;
     vector<string> ans = soln.maxNumOfSubstrings(s);
+    for(int i=0; i<ans.size(); i++){
+        cout << ans[i] << endl;
+    }
     return 0;
 }
+#endif

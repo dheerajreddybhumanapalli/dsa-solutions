@@ -32,7 +32,7 @@ Practice repo for Data Structures & Algorithms: every problem keeps **all versio
 
 - C++17, `-Wall -Wextra -O2`, no `using namespace std;` in new code.
 - Compiled binaries go to `build/` (git-ignored). Never commit binaries, `.dSYM`, `__pycache__`.
-- Optimal solution guards its demo `main()` with `#ifndef LEETCODE_JUDGE` so it pastes cleanly into LeetCode.
+- Optimal solution guards its demo `main()` with `#ifdef LOCAL` so it pastes cleanly into LeetCode.
 - Each version documents time / space complexity and verdict in its problem README.
 
 ## Quick start
@@ -47,7 +47,7 @@ make all
 
 # manual compile
 clang++ -std=c++17 -Wall -Wextra -O2 \
-  leetcode/1520-maximum-number-of-non-overlapping-substrings/solution.cpp \
+  leetcode/1520/solution.cpp \
   -o build/1520 && ./build/1520
 ```
 
