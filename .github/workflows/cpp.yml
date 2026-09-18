@@ -1,0 +1,66 @@
+name: Run Added/Modified C++ files
+
+on: 
+  push: 
+  pull_request:
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find the added/modified C++ files
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            git fetch origin "${{ github.base_ref }}" --depth=1
+            FILES=$(git diff --name-only --diff-filter=ACMR \
+              "origin/${{ github.base_ref }}...HEAD" -- '**/solution.cpp')
+          else
+            FILES=$(git diff --name-only --diff-filter=ACMR \
+            "${{ github.event.before }}" "${{ github.sha }}" -- '**/solution.cpp') 
+          fi
+
+          echo "Changed Folders: "
+
+          echo "folders<<EOF" >> $GITHUB_OUTPUT
+          while IFS= read -r file; do
+              if [ -n "$file" ]; then
+                  dir_path=$(dirname "$file")
+                  folder_name=$(basename "$dir_path")
+                  echo "$folder_name"
+                  echo "$folder_name" >> $GITHUB_OUTPUT
+              fi
+          done <<< "$FILES"
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Build the added/modified C++ files using Makefile
+        run: |
+          while IFS= read -r folder; do
+            if [ -n "$folder" ]; then
+              make "$folder"
+              echo "Built folder - $folder"
+            fi
+          done <<< "${{ steps.changed.outputs.folders }}"
+
+      - name: Execute the binary files
+        run: |
+          while IFS= read -r folder; do
+            if [ -n "$folder" ]; then
+              BINARY_PATH="./build/$folder"
+
+              if [ -f "$BINARY_PATH" ]; then
+                "$BINARY_PATH"
+                echo "Executed $folder"
+                echo "----------"
+              else
+                echo "Error: Could not find '$folder' in build"
+                exit 1
+              fi
+            fi
+          done <<< "${{ steps.changed.outputs.folders }}"
