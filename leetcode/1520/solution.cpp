@@ -27,11 +27,11 @@ public:
         return true;
     }
 
-    void getValidSubstrings(int ind, string s){
+    void getValidSubstrings(size_t ind, string s){
         if(ind==s.size()) return;
 
         string temp = "";
-        for(int i=ind; i<s.size(); i++){
+        for(size_t i=ind; i<s.size(); i++){
             temp+=s[i];
             if(isValid(temp)){
                 validIntervals.push_back({{ind,i+1},temp});
@@ -41,7 +41,7 @@ public:
         getValidSubstrings(ind+1,s);
     }
 
-    void maxNonOverlappingSubstrings(int ind, int tempLen, int prevInd, vector<string> temp){
+    void maxNonOverlappingSubstrings(size_t ind, int tempLen, int prevInd, vector<string> temp){
         if(ind>=validIntervals.size()){
             if(ans.size()<temp.size()){
                 ans = temp;
@@ -65,7 +65,7 @@ public:
     }
 
     vector<string> maxNumOfSubstrings(string s) {
-        for(int i=0; i<s.size(); i++){
+        for(size_t i=0; i<s.size(); i++){
             mp[s[i]]++;
         }
 
@@ -85,7 +85,7 @@ int main(){
     string s = "adefaddaccc";
     Solution soln;
     vector<string> ans = soln.maxNumOfSubstrings(s);
-    for(int i=0; i<ans.size(); i++){
+    for(size_t i=0; i<ans.size(); i++){
         cout << ans[i] << endl;
     }
     return 0;
