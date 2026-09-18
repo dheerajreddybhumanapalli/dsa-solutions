@@ -3,10 +3,6 @@
 Practice repo for Data Structures & Algorithms: every problem keeps **all versions tried**
 (brute force → optimal) with a short write-up comparing them. Built for signal, not volume.
 
-![CI](https://github.com/dheerajreddybhumanapalli/dsa-solutions/actions/workflows/ci.yml/badge.svg)
-![Language](https://img.shields.io/badge/language-C%2B%2B17-blue)
-![Problems](https://img.shields.io/badge/leetcode-1-green)
-
 ## Structure
 
 ```text
