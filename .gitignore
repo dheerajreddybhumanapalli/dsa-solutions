@@ -1,3 +1,16 @@
-.vscode/
+# Build output
 build/
-*.dSYM
+*.dSYM/
+*.o
+*.out
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
