@@ -56,12 +56,30 @@ public:
             return;
         }
 
-        if(temp.size()==0 || prevInd<=validIntervals[ind].first.first){
+        maxNonOverlappingSubstrings(ind+1,tempLen,prevInd,temp);
+
+        if (temp.size() == 0 ||
+            prevInd <= validIntervals[ind].first.first) {
+
             temp.push_back(validIntervals[ind].second);
-            maxNonOverlappingSubstrings(validIntervals[ind].first.second,tempLen+validIntervals[ind].second.size(),validIntervals[ind].first.second,temp);
+
+            size_t nextInd = ind + 1;
+
+            while (nextInd < validIntervals.size() &&
+                validIntervals[nextInd].first.first <
+                validIntervals[ind].first.second) {
+                nextInd++;
+            }
+
+            maxNonOverlappingSubstrings(
+                nextInd,
+                tempLen + validIntervals[ind].second.size(),
+                validIntervals[ind].first.second,
+                temp
+            );
+
             temp.pop_back();
         }
-        maxNonOverlappingSubstrings(ind+1,tempLen,prevInd,temp);
     }
 
     vector<string> maxNumOfSubstrings(string s) {
@@ -70,6 +88,10 @@ public:
         }
 
         getValidSubstrings(0,s);
+
+        // for(size_t i=0; i<validIntervals.size(); i++){
+        //     cout << validIntervals[i].first.first << " " << validIntervals[i].first.second << " " << validIntervals[i].second << endl;
+        // }
 
         sort(validIntervals.begin(),validIntervals.end());
 
@@ -82,11 +104,14 @@ public:
 
 #ifdef LOCAL
 int main(){
-    string s = "adefaddaccc";
-    Solution soln;
-    vector<string> ans = soln.maxNumOfSubstrings(s);
-    for(size_t i=0; i<ans.size(); i++){
-        cout << ans[i] << endl;
+    vector<string> inputs = {"adefaddaccc","abaabbcaaabbbccd"};      
+    for(string s: inputs){
+        Solution soln;
+        vector<string> ans = soln.maxNumOfSubstrings(s);
+        for(size_t i=0; i<ans.size(); i++){
+            cout << ans[i] << endl;
+        }
+        cout << endl;
     }
     return 0;
 }
