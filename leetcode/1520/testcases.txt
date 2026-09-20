@@ -1,3 +1,5 @@
 2
 "adefaddaccc"
+["e","f","ccc"]
 "abbaccd"
+["d","bb","cc"]

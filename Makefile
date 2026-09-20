@@ -5,11 +5,11 @@ ROOT_DIR  := $(CURDIR)
 
 
 # Discover all nested directories containing init.cpp
-INIT_SRCS := $(shell find . -mindepth 2 -type f -name init.cpp -not -path "*/.*" -not -path "./$(BUILD_DIR)/*")
+INIT_SRCS := $(shell find . -mindepth 2 -type f -name init.cpp -not -path "*/.*" -not -path "./$(BUILD_DIR)/*" -not -path "./templates/*")
 DIRS      := $(sort $(patsubst %/init.cpp,%,$(patsubst ./%,%,$(INIT_SRCS))))
 
-# Support shell tab-completions (e.g. ./dir, dir/, ./dir/)
-DIR_VARIANTS := $(DIRS) $(addsuffix /,$(DIRS)) $(addprefix ./,$(DIRS)) $(addprefix ./,$(addsuffix /,$(DIRS)))
+# Support shell tab-completions with trailing slash (e.g. dir/)
+DIR_VARIANTS := $(DIRS) $(addsuffix /,$(DIRS))
 
 .PHONY: all clean $(DIR_VARIANTS)
 .DEFAULT_GOAL := all
@@ -30,10 +30,8 @@ all: $(DIRS)
 # ----------------------------------------------------------------------
 $(DIRS): %: $(BUILD_DIR)/%/app
 
-# Normalize path variants
+# Normalize path variants (e.g. make leetcode/1401/)
 $(addsuffix /,$(DIRS)): %/: %
-$(addprefix ./,$(DIRS)): ./%: %
-$(addprefix ./,$(addsuffix /,$(DIRS))): ./%/: %
 
 # Compile <dir>/init.cpp directly into the executable
 # -I. lets init.cpp find runner.h in the root directory
