@@ -133,7 +133,7 @@ $(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp
 
 ## 5. Continuous Integration (`.github/workflows/cpp.yml`)
 
-The repository runs an automated CI pipeline on push and pull requests:
+The repository runs an automated CI pipeline on pushes to `main` and pull requests targeting `main`:
 
 1. **Change Detection**: Identifies modified `solution.cpp` files using `git diff`:
    - For pull requests: compares against `origin/${{ github.base_ref }}`.
