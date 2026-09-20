@@ -15,6 +15,11 @@ Practice repo for Data Structures & Algorithms: every problem keeps **all versio
 │       ├── testcases.txt                  # test cases
 │       ├── solution.cpp                   # optimal / latest accepted
 │       └── solution_v1_bruteforce.cpp     # earlier attempts (v1, v2, ...)
+├── docs/                                  # detailed guides & architecture docs
+│   ├── README.md                          # docs index
+│   ├── architecture.md                    # test runner & build internals
+│   ├── testcase-format.md                 # testcases.txt parsing rules
+│   └── workflow-guide.md                  # adding problems step-by-step
 ├── templates/
 │   ├── init.cpp                           # starter for test harness
 │   ├── testcases.txt                      # blank test cases
@@ -22,9 +27,17 @@ Practice repo for Data Structures & Algorithms: every problem keeps **all versio
 │   └── README_problem.md                  # starter for new problem write-ups
 ├── .github/workflows/cpp.yml              # compiles and runs testcases on push
 ├── Makefile                               # `make <platform>/<id>` / `make all`
+├── runner.h                               # central C++ test runner engine
 ├── build/                                 # local binaries only (git-ignored)
 └── README.md
 ```
+
+## Documentation
+
+Comprehensive guides are available in the [`docs/`](docs/) directory:
+- [System Architecture](docs/architecture.md): Explains `runner.h`, `init.cpp`, dynamic Makefile targets, and CI workflow.
+- [Testcase Format & Parsing](docs/testcase-format.md): Specification for `testcases.txt` inputs, outputs, and supported types.
+- [Developer Workflow Guide](docs/workflow-guide.md): Step-by-step instructions for adding problems and tracking versions.
 
 **Naming rules**
 

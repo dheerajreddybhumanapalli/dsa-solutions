@@ -5,7 +5,7 @@ ROOT_DIR  := $(CURDIR)
 
 
 # Discover all nested directories containing init.cpp
-INIT_SRCS := $(shell find . -mindepth 2 -type f -name init.cpp -not -path "*/.*" -not -path "./$(BUILD_DIR)/*" -not -path "./templates/*")
+INIT_SRCS := $(shell find . -mindepth 2 -type f -name init.cpp -not -path "*/.*" -not -path "./$(BUILD_DIR)/*" -not -path "./templates/*" -not -path "./docs/*")
 DIRS      := $(sort $(patsubst %/init.cpp,%,$(patsubst ./%,%,$(INIT_SRCS))))
 
 # Support shell tab-completions with trailing slash (e.g. dir/)
