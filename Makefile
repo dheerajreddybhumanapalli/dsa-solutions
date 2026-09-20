@@ -1,40 +1,46 @@
 CXX       := g++
 CXXFLAGS  := -Wall -std=c++17
 BUILD_DIR := build
+ROOT_DIR  := $(CURDIR)
+
 
 # Discover all nested directories containing init.cpp
 INIT_SRCS := $(shell find . -mindepth 2 -type f -name init.cpp -not -path "*/.*" -not -path "./$(BUILD_DIR)/*")
 DIRS      := $(sort $(patsubst %/init.cpp,%,$(patsubst ./%,%,$(INIT_SRCS))))
 
-.PHONY: all clean $(DIRS) $(addsuffix /,$(DIRS))
+# Support shell tab-completions (e.g. ./dir, dir/, ./dir/)
+DIR_VARIANTS := $(DIRS) $(addsuffix /,$(DIRS)) $(addprefix ./,$(DIRS)) $(addprefix ./,$(addsuffix /,$(DIRS)))
+
+.PHONY: all clean $(DIR_VARIANTS)
 .DEFAULT_GOAL := all
 
 # ----------------------------------------------------------------------
 # Target: make all
+# Builds every problem and executes its test suite
 # ----------------------------------------------------------------------
-all: $(addprefix $(BUILD_DIR)/,$(addsuffix /app,$(DIRS)))
-	@for app in $^; do \
-		echo "=== Running $$app ==="; \
-		./$$app || exit 1; \
+all: $(DIRS)
+	@for d in $(DIRS); do \
+		echo "=== Running $$d ==="; \
+		(cd "$$d" && "$(ROOT_DIR)/$(BUILD_DIR)/$$d/app") || exit 1; \
+		echo ""; \
 	done
 
 # ----------------------------------------------------------------------
-# Targets: make <dir_path> and make <dir_path>/
+# Target: make <dir_path> (e.g. make leetcode/1401)
 # ----------------------------------------------------------------------
-# Maps "make leetcode/1401" to the app binary
 $(DIRS): %: $(BUILD_DIR)/%/app
 
-# Maps "make leetcode/1401/" (tab-completion) to the app binary
-$(addsuffix /,$(DIRS)): %/: $(BUILD_DIR)/%/app
+# Normalize path variants
+$(addsuffix /,$(DIRS)): %/: %
+$(addprefix ./,$(DIRS)): ./%: %
+$(addprefix ./,$(addsuffix /,$(DIRS))): ./%/: %
 
-# ----------------------------------------------------------------------
-# Compilation Step
-# ----------------------------------------------------------------------
-# Because main.cpp #includes init.cpp, we only need to compile main.cpp.
-# init.cpp is added as a prerequisite so Make knows to rebuild if it changes.
-$(BUILD_DIR)/%/app: main.cpp %/init.cpp
+# Compile <dir>/init.cpp directly into the executable
+# -I. lets init.cpp find runner.h in the root directory
+# -I$* lets init.cpp find solution.cpp in the problem's own directory
+$(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -DINIT_DIR='"$*"' -I$* $< -o $@
+	$(CXX) $(CXXFLAGS) -I. -I$* $< -o $@
 	@echo "Built $@"
 
 clean:
