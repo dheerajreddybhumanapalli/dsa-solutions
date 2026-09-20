@@ -2,7 +2,9 @@ name: Run Added/Modified C++ files
 
 on: 
   push: 
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
   build-and-run:
@@ -20,10 +22,10 @@ jobs:
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             git fetch origin "${{ github.base_ref }}" --depth=1
             FILES=$(git diff --name-only --diff-filter=ACMR \
-              "origin/${{ github.base_ref }}...HEAD" -- '**/solution.cpp')
+              "origin/${{ github.base_ref }}...HEAD" -- '**/solution.cpp' ':(exclude)templates/**')
           else
             FILES=$(git diff --name-only --diff-filter=ACMR \
-            "${{ github.event.before }}" "${{ github.sha }}" -- '**/solution.cpp') 
+              "${{ github.event.before }}" "${{ github.sha }}" -- '**/solution.cpp' ':(exclude)templates/**') 
           fi
 
           echo "Changed Folders: "
@@ -32,9 +34,11 @@ jobs:
           while IFS= read -r file; do
               if [ -n "$file" ]; then
                   dir_path=$(dirname "$file")
-                  folder_name=$(basename "$dir_path")
-                  echo "$folder_name"
-                  echo "$folder_name" >> $GITHUB_OUTPUT
+                  relative_path=$(realpath --relative-to=. "$dir_path")
+                  if [ "$relative_path" != "templates" ] && [ "$relative_path" != "." ]; then
+                      echo "$relative_path"
+                      echo "$relative_path" >> $GITHUB_OUTPUT
+                  fi
               fi
           done <<< "$FILES"
           echo "EOF" >> $GITHUB_OUTPUT
@@ -52,10 +56,10 @@ jobs:
         run: |
           while IFS= read -r folder; do
             if [ -n "$folder" ]; then
-              BINARY_PATH="./build/$folder"
+              BINARY_PATH="./build/$folder/app"
 
               if [ -f "$BINARY_PATH" ]; then
-                "$BINARY_PATH"
+                "$BINARY_PATH" "$folder/testcases.txt"
                 echo "Executed $folder"
                 echo "----------"
               else

@@ -9,10 +9,3 @@ public:
     // TODO: implement
 };
 
-#ifdef LOCAL
-int main() {
-    Solution sol;
-    // TODO: minimal demo / asserts
-    return 0;
-}
-#endif
