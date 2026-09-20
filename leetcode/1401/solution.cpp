@@ -20,14 +20,3 @@ public:
         return ans <= radius*radius;
     }
 };
-
-#ifdef LOCAL
-int main() {
-    Solution sol;
-    int radius = 1, xCenter = 0, yCenter = 0, x1 = 1, y1 = -1, x2 = 3, y2 = 1;
-
-    cout << sol.checkOverlap(radius,xCenter,yCenter,x1,y1,x2,y2) << endl;
-
-    return 0;
-}
-#endif

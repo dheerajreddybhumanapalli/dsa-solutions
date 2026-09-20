@@ -1,28 +1,41 @@
-CXX ?= clang++
-CXXFLAGS ?= -std=c++17 -Wall -Wextra -O2
+CXX       := g++
+CXXFLAGS  := -Wall -std=c++17
 BUILD_DIR := build
 
-# All optimal solutions: leetcode/*/solution.cpp
-SOLUTIONS := $(wildcard leetcode/*/solution.cpp)
+# Discover all nested directories containing init.cpp
+INIT_SRCS := $(shell find . -mindepth 2 -type f -name init.cpp -not -path "*/.*" -not -path "./$(BUILD_DIR)/*")
+DIRS      := $(sort $(patsubst %/init.cpp,%,$(patsubst ./%,%,$(INIT_SRCS))))
 
-.PHONY: all clean help
-all:
-	@mkdir -p $(BUILD_DIR)
-	@for f in $(SOLUTIONS); do \
-		id=$$(echo $$f | cut -d/ -f2 | cut -d- -f1); \
-		$(CXX) $(CXXFLAGS) -DLOCAL $$f -o $(BUILD_DIR)/$$id || exit 1; \
-		echo "built $(BUILD_DIR)/$$id"; \
+.PHONY: all clean $(DIRS) $(addsuffix /,$(DIRS))
+.DEFAULT_GOAL := all
+
+# ----------------------------------------------------------------------
+# Target: make all
+# ----------------------------------------------------------------------
+all: $(addprefix $(BUILD_DIR)/,$(addsuffix /app,$(DIRS)))
+	@for app in $^; do \
+		echo "=== Running $$app ==="; \
+		./$$app || exit 1; \
 	done
 
-%:
-	@mkdir -p $(BUILD_DIR)
-	@f=$$(ls -d leetcode/$*-*/solution.cpp leetcode/$*/solution.cpp 2>/dev/null | head -n 1); \
-	if [ -z "$$f" ]; then echo "no solution for id $* (looked in leetcode/$*/ and leetcode/$*-*/)"; exit 1; fi; \
-	$(CXX) $(CXXFLAGS) -DLOCAL $$f -o $(BUILD_DIR)/$* || exit 1; \
-	echo "built $(BUILD_DIR)/$* -- run with ./$(BUILD_DIR)/$*"
+# ----------------------------------------------------------------------
+# Targets: make <dir_path> and make <dir_path>/
+# ----------------------------------------------------------------------
+# Maps "make leetcode/1401" to the app binary
+$(DIRS): %: $(BUILD_DIR)/%/app
+
+# Maps "make leetcode/1401/" (tab-completion) to the app binary
+$(addsuffix /,$(DIRS)): %/: $(BUILD_DIR)/%/app
+
+# ----------------------------------------------------------------------
+# Compilation Step
+# ----------------------------------------------------------------------
+# Because main.cpp #includes init.cpp, we only need to compile main.cpp.
+# init.cpp is added as a prerequisite so Make knows to rebuild if it changes.
+$(BUILD_DIR)/%/app: main.cpp %/init.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -DINIT_DIR='"$*"' -I$* $< -o $@
+	@echo "Built $@"
 
 clean:
-	rm -rf $(BUILD_DIR)/*
-
-help:
-	@echo "Targets: make <problem-id> (e.g. make 1520), make all, make clean"
+	rm -rf $(BUILD_DIR)

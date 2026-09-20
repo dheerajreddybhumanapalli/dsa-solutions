@@ -89,10 +89,6 @@ public:
 
         getValidSubstrings(0,s);
 
-        // for(size_t i=0; i<validIntervals.size(); i++){
-        //     cout << validIntervals[i].first.first << " " << validIntervals[i].first.second << " " << validIntervals[i].second << endl;
-        // }
-
         sort(validIntervals.begin(),validIntervals.end());
 
         vector<string> temp;
@@ -101,18 +97,3 @@ public:
         return ans;
     }
 };
-
-#ifdef LOCAL
-int main(){
-    vector<string> inputs = {"adefaddaccc","abaabbcaaabbbccd"};      
-    for(string s: inputs){
-        Solution soln;
-        vector<string> ans = soln.maxNumOfSubstrings(s);
-        for(size_t i=0; i<ans.size(); i++){
-            cout << ans[i] << endl;
-        }
-        cout << endl;
-    }
-    return 0;
-}
-#endif
