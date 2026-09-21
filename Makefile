@@ -36,7 +36,7 @@ $(addsuffix /,$(DIRS)): %/: %
 # Compile <dir>/init.cpp directly into the executable
 # -I. lets init.cpp find runner.h in the root directory
 # -I$* lets init.cpp find solution.cpp in the problem's own directory
-$(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp
+$(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp runner.h
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -I. -I$* $< -o $@
 	@echo "Built $@"

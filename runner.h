@@ -87,10 +87,30 @@ inline T parseValue(const string &raw) {
 // --- Argument Splitting ---
 inline vector<string> splitTokens(const string &line) {
     vector<string> tokens;
-    stringstream ss(line);
-    string token;
-    while (getline(ss, token, ',')) {
-        tokens.push_back(trim(token));
+    string current;
+    int bracketDepth = 0;
+    bool inQuotes = false;
+
+    for (size_t i = 0; i < line.size(); ++i) {
+        char c = line[i];
+        if (c == '"' && (i == 0 || line[i - 1] != '\\')) {
+            inQuotes = !inQuotes;
+            current += c;
+        } else if (!inQuotes && (c == '[' || c == '{' || c == '(')) {
+            bracketDepth++;
+            current += c;
+        } else if (!inQuotes && (c == ']' || c == '}' || c == ')')) {
+            bracketDepth--;
+            current += c;
+        } else if (c == ',' && bracketDepth == 0 && !inQuotes) {
+            tokens.push_back(trim(current));
+            current.clear();
+        } else {
+            current += c;
+        }
+    }
+    if (!trim(current).empty()) {
+        tokens.push_back(trim(current));
     }
     return tokens;
 }
