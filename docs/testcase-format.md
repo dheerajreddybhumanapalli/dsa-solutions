@@ -32,10 +32,16 @@ Each `testcases.txt` file adheres to an alternating line structure:
 
 | Type in C++ | `testcases.txt` Input Format | Example |
 | :--- | :--- | :--- |
-| `int` / `long long` | Plain number | `42`, `-100` |
+| `int` / `long long` / `unsigned` | Plain number | `42`, `-100` |
+| `float` / `double` | Floating point number | `3.14159`, `1e-5` |
+| `char` | Quoted or raw character | `'a'`, `"c"`, `x` |
 | `string` | Quoted or unquoted string | `"abc"`, `hello` |
 | `bool` | `true`, `false`, `1`, `0` | `true`, `false` |
-| `vector<T>` | Bracketed comma-separated items | `[1, 2, 3]`, `["cat", "dog"]` |
+| `pair<T1, T2>` | Parenthesized or bracketed pair | `[1, 2]`, `(3, 4)` |
+| `vector<T>` | Bracketed comma-separated items (supports nesting) | `[1, 2, 3]`, `[[1,2],[3,4]]` |
+| `ListNode*` | Bracketed array format | `[1, 2, 3, 4]`, `[]` |
+| `TreeNode*` | LeetCode level-order BFS array | `[1, null, 2, 3]`, `[4, 2, 7, 1, 3]` |
+| `void` (in-place modification) | Input is modified in place; expected line is target state | `[0, 1, 0, 3, 12]` -> `[1, 3, 12, 0, 0]` |
 
 ---
 
