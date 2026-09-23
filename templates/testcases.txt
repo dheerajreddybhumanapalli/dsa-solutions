@@ -1,0 +1,96 @@
+# ============================================================================
+# testcases.txt FORMAT GUIDE (runner.h harness)
+# DELETE ALL "#" LINES before running — the runner has no comment syntax.
+# A "#" line left in place will be parsed as test data and break alignment.
+# Full spec: docs/testcase-format.md
+# ============================================================================
+# STRUCTURE:
+#   Line 1: N = number of test cases (integer only, e.g. 3)
+#   Then exactly 2 lines per case:
+#     <arguments_for_case_i>   (comma-separated ONLY between top-level args)
+#     <expected_output_for_case_i>
+# RULES:
+#   - Blank lines are ignored. NO "#" or "//" comments at runtime.
+#   - Multi-arg functions: split on top-level commas only.
+#     Brackets [...] (...) and quotes "..." protect inner commas.
+#   - Spaces are OPTIONAL everywhere: [1,2,3] == [1, 2, 3].
+#     Same for ListNode*/TreeNode*/nested vectors and between top-level
+#     args ([1,2,3],5 == [1, 2, 3], 5). Use spaces for readability.
+#   - Single string arg: the WHOLE line is one token — always quote it: "abc".
+#   - Floats compare with tolerance 1e-5. Vectors compare order-insensitively
+#     (exact match first, then sorted fallback).
+# ----------------------------------------------------------------------------
+# TYPE                    | SYNTAX                          | EXAMPLE
+# ----------------------------------------------------------------------------
+# int/long long/unsigned  | plain number                    | 42, -100
+# float/double            | decimal / exponent              | 3.14159, 1e-5
+# char                    | 'a' ("c" or bare x also work)    | 'a'
+# string                  | ALWAYS double-quote             | "abc"
+# bool                    | true/false (1/0 also work)      | true
+# pair<T1,T2>             | [a, b] or (a, b)                | [1, 2]
+# vector<int>             | [1, 2, 3], [] = empty            | [1, 2, 3]
+# vector<string>          | quote EACH element              | ["e","f","ccc"]
+# vector<vector<int>>     | nested brackets                 | [[1,2],[3,4]]
+# ListNode*               | array, [] = empty               | [1, 2, 3, 4]
+# TreeNode*               | level-order, null = missing     | [1, null, 2, 3]
+# void (in-place)         | args line mutated; expected =   | [0,1,0,3,12] -> [1,3,12,0,0]
+#                         | target state of 1st arg         |
+# ----------------------------------------------------------------------------
+# COPY-PASTE PATTERNS (uncomment + replace, keep N in sync):
+# ----------------------------------------------------------------------------
+# -- single int -> int (e.g. N=1):
+# 1
+# 5
+# 25
+# -- single string -> int:
+# 2
+# "abc"
+# 148
+# "zaza"
+# 160
+# -- vector<int>, int -> int (TWO args, top-level comma):
+# 3
+# [1,1,4,2,3], 5
+# 2
+# [5,6,7,8,9], 4
+# -1
+# [3,2,20,1,1,3], 10
+# 5
+# -- string -> vector<string>:
+# 2
+# "adefaddaccc"
+# ["e","f","ccc"]
+# "abbaccd"
+# ["d","bb","cc"]
+# -- vector<vector<int>> -> int:
+# 1
+# [[1,2],[2,3],[3,4]]
+# 2
+# -- 7 ints -> bool:
+# 1
+# 1, 0, 0, 1, -1, 3, 1
+# true
+# -- TreeNode* -> int (level-order):
+# 1
+# [4, 2, 7, 1, 3]
+# 5
+# -- ListNode* -> ListNode*:
+# 1
+# [1, 2, 3, 4]
+# [1, 2, 3, 4]
+# -- void in-place (e.g. moveZeroes, sort):
+# 1
+# [0, 1, 0, 3, 12]
+# [1, 3, 12, 0, 0]
+# ----------------------------------------------------------------------------
+# COMMON ERRORS:
+#   argument count mismatch -> commas on args line != function arity.
+#     (A string containing a comma is only safe as the SOLE argument.)
+#   FAIL with shifted cases -> a missing expected-output line misaligned
+#     every case after it. Each input MUST have its expected line.
+#   stoi: no conversion   -> line 1 is not a plain integer N.
+# ============================================================================
+# REPLACE this whole file with your cases. Minimal blank template:
+# 1
+# <args>
+# <expected>
