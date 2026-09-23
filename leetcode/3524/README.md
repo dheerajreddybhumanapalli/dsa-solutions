@@ -9,5 +9,4 @@
 7. return result
 
 
-Time Complexity: O(n*k)
-Space Complexity: O(k)
+TC/SC: O(n*k)/O(k)

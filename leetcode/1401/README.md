@@ -1,3 +1,5 @@
 # Circle and Rectangle Overlapping
 
-This problem's intuition is simple where we try to find if any point from rectangle is within the circle or if circle's center is within the rectangle
+1. Find the minimum distance from the center of the circle to the rectangle. If the distance is less than or equal to the radius of the circle, then they overlap.
+
+TC/SC: O(1)/O(1)
