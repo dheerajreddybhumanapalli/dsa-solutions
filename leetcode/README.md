@@ -9,6 +9,7 @@
 | 4056 | [Number of Intersecting Interval Pairs I](https://leetcode.com/problems/number-of-intersecting-interval-pairs-i/description/) | Easy | C++ | O(n*log(n)) / O(n) | v1 optimal| [Folder](4056/) |
 | 4057 | [Number of Intersecting Interval Pairs II](https://leetcode.com/problems/number-of-intersecting-interval-pairs-ii/description/) | Medium | C++ | O(n*log(n)) / O(n) | v1 optimal| [Folder](4057/) |
 | 1658 | [Minimum Operations to Reduce X to Zero](https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/description/) | Medium | C++ | O(n) / O(1) | v1 optimal| [Folder](1658/) |
+| 3550 | [Smallest Index With Digit Sum Equal to Index](https://leetcode.com/problems/smallest-index-with-digit-sum-equal-to-index/description/) | Easy | C++ | O(n * d) / O(1) | v1 optimal| [Folder](3550/) |
 
 
 > Add newest rows at the bottom. Keep `Best Complexity` honest — it must match the `solution.cpp` in the folder.
