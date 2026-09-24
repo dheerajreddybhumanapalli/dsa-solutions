@@ -11,8 +11,8 @@ public:
                 sum += number % 10;
                 number /= 10;
             }
-            if(sum == i) {
-                return i;
+            if(sum == static_cast<int>(i)) {
+                return static_cast<int>(i);
             }
         }
 

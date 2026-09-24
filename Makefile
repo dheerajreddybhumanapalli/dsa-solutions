@@ -1,5 +1,5 @@
 CXX       := g++
-CXXFLAGS  := -Wall -std=c++17
+CXXFLAGS  := -Wall -Wextra -O2 -std=c++17
 BUILD_DIR := build
 ROOT_DIR  := $(CURDIR)
 
@@ -36,10 +36,22 @@ $(addsuffix /,$(DIRS)): %/: %
 # Compile <dir>/init.cpp directly into the executable
 # -I. lets init.cpp find runner.h in the root directory
 # -I$* lets init.cpp find solution.cpp in the problem's own directory
-$(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp runner.h
+# Makefile is a prereq so flag changes trigger a rebuild
+$(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp runner.h Makefile
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -I. -I$* $< -o $@
 	@echo "Built $@"
+
+# Run <dir>'s test suite (builds first if stale)
+# e.g. make leetcode/3550/run
+$(RUN_TARGETS): %/run: $(BUILD_DIR)/%/app
+	(cd $* && "$(ROOT_DIR)/$(BUILD_DIR)/$*/app")
+
+# Force rebuild <dir> (shows warnings again)
+# e.g. make leetcode/3550/rebuild
+$(REBUILD_TARGETS): %/rebuild:
+	rm -rf $(BUILD_DIR)/$*/app
+	@$(MAKE) $*
 
 clean:
 	rm -rf $(BUILD_DIR)
