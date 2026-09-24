@@ -1,7 +1,10 @@
+#include <vector>
+using namespace std;
+
 class Solution {
 public:
     int smallestIndex(vector<int>& nums) {
-        for(int i = 0; i < nums.size(); i++) {
+        for(size_t i = 0; i < nums.size(); i++) {
             int number = nums[i], sum = 0;
             
             while(number) {
