@@ -1,8 +1,13 @@
+#include <unordered_map>
+#include <vector>
+#include <string>
+using namespace std;
+
 class Solution {
 public:
     string evaluate(string s, vector<vector<string>>& knowledge) {
         unordered_map<string,string> mp;
-        for(auto it: knowledge){
+        for(const auto& it: knowledge){
             mp[it[0]] = it[1];
         }
 
