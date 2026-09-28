@@ -4,7 +4,7 @@ using namespace std;
 class Solution {
 public:
     int maxDepth(string s) {
-        stack<int> st;
+        stack<char> st;
         int maxDepth = 0;
 
         for (char c : s) {
