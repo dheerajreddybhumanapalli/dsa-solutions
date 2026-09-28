@@ -1,0 +1,7 @@
+3
+"(abcd)"
+"dcba"
+"(u(love)i)"
+"iloveu"
+"(ed(et(oc))el)"
+"leetcode"

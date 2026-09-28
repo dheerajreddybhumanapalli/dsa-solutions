@@ -12,6 +12,7 @@
 | 3550 | [Smallest Index With Digit Sum Equal to Index](https://leetcode.com/problems/smallest-index-with-digit-sum-equal-to-index/description/) | Easy | C++ | O(n * d) / O(1) | v1 optimal| [Folder](3550/) |
 | 1807 | [Evaluate the Bracket Pairs of a String](https://leetcode.com/problems/evaluate-the-bracket-pairs-of-a-string/description/) | Medium | C++ | O(n+m) / O(n+m) | v1 optimal| [Folder](1807/) |
 | 1614 | [Maximum Nesting Depth of the Parentheses](https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/description/) | Easy | C++ | O(n) / O(n) | v1 optimal| [Folder](1614/) |
+| 1190 | [Reverse Substrings Between Each Pair of Parentheses](https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/description/) | Medium | C++ | O(n) / O(n) | v1 optimal| [Folder](1190/) |
 
 
 > Add newest rows at the bottom. Keep `Best Complexity` honest — it must match the `solution.cpp` in the folder.
