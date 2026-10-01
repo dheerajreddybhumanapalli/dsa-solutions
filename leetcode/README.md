@@ -15,6 +15,7 @@
 | 1190 | [Reverse Substrings Between Each Pair of Parentheses](https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/description/) | Medium | C++ | O(n) / O(n) | v1 optimal| [Folder](1190/) |
 | 2267 | [Check if There Is a Valid Parentheses String Path](https://leetcode.com/problems/check-if-there-is-a-valid-parentheses-string-path/description/) | Hard | C++ | O(m*n)/O(m*n*(m+n)) | v1 optimal| [Folder](2267/) |
 | 1111 | [Maximum Nesting Depth of Two Valid Parentheses Strings](https://leetcode.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/description/) | Medium | C++ | O(n) / O(n) | v1 optimal| [Folder](1111/) |
+| 20 | [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/description/) | Easy | C++ | O(n) / O(n) | v1 optimal| [Folder](20/) |
 
 
 > Add newest rows at the bottom. Keep `Best Complexity` honest — it must match the `solution.cpp` in the folder.
