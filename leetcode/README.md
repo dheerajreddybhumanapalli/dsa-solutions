@@ -16,8 +16,9 @@
 | 2267 | [Check if There Is a Valid Parentheses String Path](https://leetcode.com/problems/check-if-there-is-a-valid-parentheses-string-path/description/) | Hard | C++ | O(m*n)/O(m*n*(m+n)) | v1 optimal| [Folder](2267/) |
 | 1111 | [Maximum Nesting Depth of Two Valid Parentheses Strings](https://leetcode.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/description/) | Medium | C++ | O(n) / O(n) | v1 optimal| [Folder](1111/) |
 | 20 | [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/description/) | Easy | C++ | O(n) / O(n) | v1 optimal| [Folder](20/) |
-| 22 | [Generate Parentheses](https://leetcode.com/problems/generate-parentheses/description/) | Easy | C++ | O(2^n) / O(2^n) | v1 optimal| [Folder](22/) |
+| 22 | [Generate Parentheses](https://leetcode.com/problems/generate-parentheses/description/) | Easy | C++ | O(2<sup>n</sup>) / O(2<sup>n</sup>) | v1 optimal| [Folder](22/) |
 | 678 | [Valid Parenthesis String](https://leetcode.com/problems/valid-parenthesis-string/description/) | Medium | C++ | O(n) / O(1) | v1 optimal| [Folder](678/) |
+| 856 | [Score of Parentheses](https://leetcode.com/problems/score-of-parentheses/description/) | Medium | C++ | O(n<sup>2</sup>) / O(n) | v1 optimal| [Folder](856/) |
 
 
 > Add newest rows at the bottom. Keep `Best Complexity` honest — it must match the `solution.cpp` in the folder.
