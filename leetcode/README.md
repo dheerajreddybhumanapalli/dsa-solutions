@@ -20,6 +20,7 @@
 | 678 | [Valid Parenthesis String](https://leetcode.com/problems/valid-parenthesis-string/description/) | Medium | C++ | O(n) / O(1) | v1 optimal| [Folder](678/) |
 | 856 | [Score of Parentheses](https://leetcode.com/problems/score-of-parentheses/description/) | Medium | C++ | O(n<sup>2</sup>) / O(n) | v1 optimal| [Folder](856/) |
 | 921 | [Minimum Add to Make Parentheses Valid](https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/description/) | Medium | C++ | O(n) / O(n) | v1 optimal| [Folder](921/) |
+| 1021 | [Remove Outermost Parentheses](https://leetcode.com/problems/remove-outermost-parentheses/description/) | Easy | C++ | O(n) / O(n) | v1 optimal| [Folder](1021/) |
 
 
 > Add newest rows at the bottom. Keep `Best Complexity` honest — it must match the `solution.cpp` in the folder.
