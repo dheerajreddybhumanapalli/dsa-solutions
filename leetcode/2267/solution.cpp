@@ -5,9 +5,9 @@ using namespace std;
 class Solution {
 public:
     bool dfs(int i, int j, int count, vector<vector<char>>& grid, vector<vector<vector<int>>>& dp) {
-        if(i<0 || j<0 || i>=grid.size() || j>=grid[0].size()) return false;
+        if(i<0 || j<0 || i>=(int)grid.size() || j>=(int)grid[0].size()) return false;
 
-        if(i==grid.size()-1 && j==grid[0].size()-1) {
+        if(i==(int)grid.size()-1 && j==(int)grid[0].size()-1) {
             if(count==1) return true;
             else return false;
         }

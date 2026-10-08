@@ -6,7 +6,7 @@ class Solution {
 public:
     bool checkValidString(string s) {
         int low=0, high=0;
-        for(int i=0; i<s.size(); i++){
+        for(int i=0; i<(int)s.size(); i++){
             if(s[i]=='('){
                 low++;
                 high++;

@@ -9,7 +9,7 @@ public:
         int target = totalSum - x;
         int sum = 0, maxLen = -1;
 
-        for(int r=0, l=0; r<nums.size(); r++) {
+        for(int r=0, l=0; r<(int)nums.size(); r++) {
             sum += nums[r];
             while(sum > target && l <= r) {
                 sum -= nums[l++];

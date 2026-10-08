@@ -10,7 +10,7 @@ public:
         pq.push(intervals[0][1]);
         long long ans = 0;
 
-        for(int i=1; i<intervals.size(); i++){
+        for(int i=1; i<(int)intervals.size(); i++){
             while(!pq.empty() && intervals[i][0]>pq.top()){
                 pq.pop();
             }
