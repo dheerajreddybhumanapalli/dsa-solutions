@@ -48,7 +48,7 @@ Each `testcases.txt` file adheres to an alternating line structure:
 ## 3. Concrete Examples
 
 ### Example 1: Single String Argument returning Integer
-From [LeetCode 3498](file:///Users/dheerajbhumanapalli/practice/leetcode/3498/testcases.txt):
+From [LeetCode 3498](../leetcode/3498/testcases.txt):
 ```text
 2
 "abc"
@@ -60,7 +60,7 @@ From [LeetCode 3498](file:///Users/dheerajbhumanapalli/practice/leetcode/3498/te
 - Case 2 input: `"zaza"`, expected: `160`
 
 ### Example 2: Multiple Arguments
-From [LeetCode 1401](file:///Users/dheerajbhumanapalli/practice/leetcode/1401/testcases.txt) (`checkOverlap(radius, xCenter, yCenter, x1, y1, x2, y2)`):
+From [LeetCode 1401](../leetcode/1401/testcases.txt) (`checkOverlap(radius, xCenter, yCenter, x1, y1, x2, y2)`):
 ```text
 3
 1, 0, 0, 1, -1, 3, 1
@@ -73,7 +73,7 @@ true
 - The 7 arguments are separated by commas on the input line.
 
 ### Example 3: Returning a `vector<string>`
-From [LeetCode 1520](file:///Users/dheerajbhumanapalli/practice/leetcode/1520/testcases.txt):
+From [LeetCode 1520](../leetcode/1520/testcases.txt):
 ```text
 2
 "adefaddaccc"

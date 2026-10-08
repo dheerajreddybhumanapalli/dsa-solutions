@@ -15,7 +15,10 @@ DIRS      := $(sort $(patsubst %/init.cpp,%,$(patsubst ./%,%,$(INIT_SRCS))))
 # Support shell tab-completions with trailing slash (e.g. dir/)
 DIR_VARIANTS := $(DIRS) $(addsuffix /,$(DIRS))
 
-.PHONY: all clean $(DIR_VARIANTS)
+RUN_TARGETS     := $(addsuffix /run,$(DIRS))
+REBUILD_TARGETS := $(addsuffix /rebuild,$(DIRS))
+
+.PHONY: all clean $(DIR_VARIANTS) $(RUN_TARGETS) $(REBUILD_TARGETS)
 .DEFAULT_GOAL := all
 
 # ----------------------------------------------------------------------

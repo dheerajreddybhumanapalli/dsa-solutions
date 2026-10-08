@@ -18,7 +18,7 @@ Each problem directory contains four primary files:
 
 ## 2. The Test Harness Engine (`runner.h`)
 
-[`runner.h`](file:///Users/dheerajbhumanapalli/practice/runner.h) is a header-only, C++17 generic test harness located in the repository root. It handles reading input files, parsing tokens into typed C++ values, invoking the solution method, and verifying equality.
+[`runner.h`](../runner.h) is a header-only, C++17 generic test harness located in the repository root. It handles reading input files, parsing tokens into typed C++ values, invoking the solution method, and verifying equality.
 
 ### Key Components
 
@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
 
 ## 3. The Problem Adapter (`init.cpp`)
 
-[`init.cpp`](file:///Users/dheerajbhumanapalli/practice/templates/init.cpp) defines the function `bool runTests(istream &in)` declared by `runner.h`.
+[`init.cpp`](../templates/init.cpp) defines the function `bool runTests(istream &in)` declared by `runner.h`.
 
 It connects `runner.h`'s `runAuto` template with the problem's `Solution` method via a stateless lambda decaying into a function pointer (`+[]`):
 
@@ -98,7 +98,7 @@ Because the lambda has no captures, the unary `+` operator decays the lambda int
 
 ## 4. Build System (`Makefile`)
 
-The [`Makefile`](file:///Users/dheerajbhumanapalli/practice/Makefile) dynamically discovers problems and builds standalone binaries.
+The [`Makefile`](../Makefile) dynamically discovers problems and builds standalone binaries.
 
 ### A. Dynamic Problem Discovery
 ```makefile
@@ -120,11 +120,13 @@ $(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp runner.h $(DEFAULT_INCLUDE) Makefi
 ```
 - `-I.` allows `init.cpp` to locate `runner.h` in the workspace root.
 - `-I$*` allows `init.cpp` to resolve `#include "solution.cpp"` from within its problem directory.
-- `-include $(DEFAULT_INCLUDE)` force-injects [`defaults.h`](file:///Users/dheerajbhumanapalli/practice/defaults.h) as the first thing in the translation unit. That prelude supplies `#include <bits/stdc++.h>` and `using namespace std;`, so `solution.cpp` may omit them and still compile on CI.
+- `-include $(DEFAULT_INCLUDE)` force-injects [`defaults.h`](../defaults.h) as the first thing in the translation unit. That prelude supplies `#include <bits/stdc++.h>` and `using namespace std;`, so `solution.cpp` may omit them and still compile on CI.
 - Output binary is created at `build/<dir>/app`.
 
 ### C. Execution Targets
 - `make leetcode/1401`: Compiles the binary `build/leetcode/1401/app`.
+- `make leetcode/1401/run`: Builds the binary if stale, then runs that problem's suite from inside its own directory.
+- `make leetcode/1401/rebuild`: Removes the existing binary and recompiles it, so `-Wall -Wextra` warnings are shown again.
 - `make all`: Compiles all discovered problem binaries and immediately runs each against its test cases in sequence:
   ```bash
   (cd "$$d" && "$(ROOT_DIR)/$(BUILD_DIR)/$$d/app") || exit 1
