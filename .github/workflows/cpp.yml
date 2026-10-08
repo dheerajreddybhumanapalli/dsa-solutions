@@ -3,8 +3,18 @@ name: Run Added/Modified C++ files
 on: 
   push: 
     branches: [ main ]
+    paths:
+      - '**/solution.cpp'
+      - '**/testcases.txt'
+      - '**/init.cpp'
+      - '!templates/**'
   pull_request:
     branches: [ main ]
+    paths:
+      - '**/solution.cpp'
+      - '**/testcases.txt'
+      - '**/init.cpp'
+      - '!templates/**'
 
 jobs:
   build-and-run:
