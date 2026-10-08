@@ -3,6 +3,10 @@ CXXFLAGS  := -Wall -Wextra -O2 -std=c++17
 BUILD_DIR := build
 ROOT_DIR  := $(CURDIR)
 
+# Prelude force-included into every translation unit so solutions can rely on
+# <bits/stdc++.h> and `using namespace std;` without declaring them.
+DEFAULT_INCLUDE := $(ROOT_DIR)/defaults.h
+
 
 # Discover all nested directories containing init.cpp
 INIT_SRCS := $(shell find . -mindepth 2 -type f -name init.cpp -not -path "*/.*" -not -path "./$(BUILD_DIR)/*" -not -path "./templates/*" -not -path "./docs/*")
@@ -36,10 +40,11 @@ $(addsuffix /,$(DIRS)): %/: %
 # Compile <dir>/init.cpp directly into the executable
 # -I. lets init.cpp find runner.h in the root directory
 # -I$* lets init.cpp find solution.cpp in the problem's own directory
+# -include injects defaults.h before the source, so solutions may omit the includes
 # Makefile is a prereq so flag changes trigger a rebuild
-$(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp runner.h Makefile
+$(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp runner.h $(DEFAULT_INCLUDE) Makefile
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -I. -I$* $< -o $@
+	$(CXX) $(CXXFLAGS) -include $(DEFAULT_INCLUDE) -I. -I$* $< -o $@
 	@echo "Built $@"
 
 # Run <dir>'s test suite (builds first if stale)

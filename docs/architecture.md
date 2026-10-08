@@ -113,13 +113,14 @@ Any folder containing `init.cpp` (except hidden directories, `build/`, `template
 
 ### B. Compilation Rule
 ```makefile
-$(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp
+$(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp runner.h $(DEFAULT_INCLUDE) Makefile
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -I. -I$* $< -o $@
+	$(CXX) $(CXXFLAGS) -include $(DEFAULT_INCLUDE) -I. -I$* $< -o $@
 	@echo "Built $@"
 ```
 - `-I.` allows `init.cpp` to locate `runner.h` in the workspace root.
 - `-I$*` allows `init.cpp` to resolve `#include "solution.cpp"` from within its problem directory.
+- `-include $(DEFAULT_INCLUDE)` force-injects [`defaults.h`](file:///Users/dheerajbhumanapalli/practice/defaults.h) as the first thing in the translation unit. That prelude supplies `#include <bits/stdc++.h>` and `using namespace std;`, so `solution.cpp` may omit them and still compile on CI.
 - Output binary is created at `build/<dir>/app`.
 
 ### C. Execution Targets

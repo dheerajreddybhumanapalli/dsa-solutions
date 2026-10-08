@@ -28,6 +28,7 @@ Practice repo for Data Structures & Algorithms: every problem keeps **all versio
 ├── .github/workflows/cpp.yml              # compiles and runs testcases on push
 ├── Makefile                               # `make <platform>/<id>` / `make all`
 ├── runner.h                               # central C++ test runner engine
+├── defaults.h                             # force-included prelude (bits/stdc++.h + using namespace std;)
 ├── build/                                 # local binaries only (git-ignored)
 └── README.md
 ```
@@ -47,7 +48,7 @@ Comprehensive guides are available in the [`docs/`](docs/) directory:
 
 ## Coding practices
 
-- C++17, `-Wall -Wextra -O2`, no `using namespace std;` in new code.
+- C++17, `-Wall -Wextra -O2`. The build force-includes `defaults.h` (`#include <bits/stdc++.h>` + `using namespace std;`), so `solution.cpp` files can omit those lines and still compile on CI.
 - Compiled binaries go to `build/` (git-ignored). Never commit binaries or `.dSYM`.
 - Test harness (`init.cpp`) automatically parses `testcases.txt` and verifies the solution.
 - Each version documents time / space complexity and verdict in its problem README.
