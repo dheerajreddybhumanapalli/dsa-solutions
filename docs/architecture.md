@@ -113,17 +113,25 @@ Any folder containing `init.cpp` (except hidden directories, `build/`, `template
 
 ### B. Compilation Rule
 ```makefile
-$(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp runner.h $(DEFAULT_INCLUDE) Makefile
+$(BUILD_DIR)/%/app: %/init.cpp %/solution.cpp runner.h Makefile
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -include $(DEFAULT_INCLUDE) -I. -I$* $< -o $@
+	$(CXX) $(CXXFLAGS) -I. -I$* $< -o $@
 	@echo "Built $@"
 ```
 - `-I.` allows `init.cpp` to locate `runner.h` in the workspace root.
 - `-I$*` allows `init.cpp` to resolve `#include "solution.cpp"` from within its problem directory.
-- `-include $(DEFAULT_INCLUDE)` force-injects [`defaults.h`](../defaults.h) as the first thing in the translation unit. That prelude supplies `#include <bits/stdc++.h>` and `using namespace std;`, so `solution.cpp` may omit them and still compile on CI.
 - Output binary is created at `build/<dir>/app`.
 
-### C. Execution Targets
+### C. Solution Source Convention
+Each `solution.cpp` is self-contained and starts with:
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+```
+Because the file declares its own includes, it compiles identically in the local Makefile build and in CI, with no build-level prelude needed.
+
+### D. Execution Targets
 - `make leetcode/1401`: Compiles the binary `build/leetcode/1401/app`.
 - `make leetcode/1401/run`: Builds the binary if stale, then runs that problem's suite from inside its own directory.
 - `make leetcode/1401/rebuild`: Removes the existing binary and recompiles it, so `-Wall -Wextra` warnings are shown again.

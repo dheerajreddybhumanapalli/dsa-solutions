@@ -1,9 +1,4 @@
-#include <algorithm>
-#include <climits>
-#include <vector>
-#include <unordered_map>
-#include <iostream>
-#include <string>
+#include <bits/stdc++.h>
 
 using namespace std;
 
