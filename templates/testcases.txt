@@ -1,5 +1,5 @@
 # ============================================================================
-# testcases.txt FORMAT GUIDE (runner.h harness)
+# testcases.txt FORMAT GUIDE (runner.h / runner.py harness)
 # DELETE ALL "#" LINES before running — the runner has no comment syntax.
 # A "#" line left in place will be parsed as test data and break alignment.
 # Full spec: docs/testcase-format.md

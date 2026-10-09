@@ -1,6 +1,6 @@
 # Testcase Format & Parsing Guide
 
-This guide explains how `testcases.txt` must be structured so that the `runner.h` harness parses input arguments and expected outputs properly.
+This guide explains how `testcases.txt` must be structured so that the `runner.h` (C++) and `runner.py` (Python) harnesses parse input arguments and expected outputs properly.
 
 ---
 
@@ -24,7 +24,10 @@ Each `testcases.txt` file adheres to an alternating line structure:
 - **Odd Lines**: The expected return value.
 
 > [!IMPORTANT]
-> The test harness (`runner.h`) expects exactly two non-empty lines per test case. If you omit an expected output line, subsequent lines will become misaligned and tests will fail. Do not add `#` or `//` comment lines in `testcases.txt`.
+> The test harnesses (`runner.h` / `runner.py`) expect exactly two non-empty lines per test case. If you omit an expected output line, subsequent lines will become misaligned and tests will fail. Do not add `#` or `//` comment lines in `testcases.txt`.
+
+> [!NOTE]
+> A single `testcases.txt` is shared by both languages: the C++ (`init.cpp`) and Python (`init.py`) harnesses parse the same file, so a problem solved in both languages only needs its cases written once.
 
 ---
 

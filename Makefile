@@ -13,7 +13,16 @@ DIR_VARIANTS := $(DIRS) $(addsuffix /,$(DIRS))
 RUN_TARGETS     := $(addsuffix /run,$(DIRS))
 REBUILD_TARGETS := $(addsuffix /rebuild,$(DIRS))
 
-.PHONY: all clean $(DIR_VARIANTS) $(RUN_TARGETS) $(REBUILD_TARGETS)
+# ----------------------------------------------------------------------
+# Python: discover all nested directories containing init.py
+# ----------------------------------------------------------------------
+PYTHON := python3
+
+PY_INIT_SRCS := $(shell find . -mindepth 2 -type f -name init.py -not -path "*/.*" -not -path "./$(BUILD_DIR)/*" -not -path "./templates/*" -not -path "./docs/*")
+PY_DIRS      := $(sort $(patsubst %/init.py,%,$(patsubst ./%,%,$(PY_INIT_SRCS))))
+PY_TARGETS   := $(addprefix py-,$(PY_DIRS))
+
+.PHONY: all py-all clean $(DIR_VARIANTS) $(RUN_TARGETS) $(REBUILD_TARGETS) $(PY_TARGETS)
 .DEFAULT_GOAL := all
 
 # ----------------------------------------------------------------------
@@ -55,5 +64,20 @@ $(REBUILD_TARGETS): %/rebuild:
 	rm -rf $(BUILD_DIR)/$*/app
 	@$(MAKE) $*
 
+# ----------------------------------------------------------------------
+# Target: make py-all
+# Runs the Python test suite for every problem that ships an init.py
+# ----------------------------------------------------------------------
+py-all: $(PY_TARGETS)
+
+# ----------------------------------------------------------------------
+# Target: make py-<dir>  (e.g. make py-leetcode/20)
+# Runs <dir>/init.py against <dir>/testcases.txt
+# PYTHONPATH=. lets init.py find runner.py in the root (mirrors -I. for C++)
+# ----------------------------------------------------------------------
+$(PY_TARGETS): py-%:
+	PYTHONPATH="$(ROOT_DIR)" $(PYTHON) "$*/init.py" "$*/testcases.txt"
+
 clean:
 	rm -rf $(BUILD_DIR)
+	find . -type d -name __pycache__ -prune -exec rm -rf {} +

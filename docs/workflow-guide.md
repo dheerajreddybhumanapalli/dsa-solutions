@@ -18,6 +18,12 @@ make leetcode/1401
 # OR
 cd leetcode/1401 && ../../build/leetcode/1401/app
 
+# Run the Python testcases for one problem (shares testcases.txt)
+make py-leetcode/1401
+
+# Run every Python testcase
+make py-all
+
 # Clean all generated build artifacts
 make clean
 ```
@@ -65,6 +71,26 @@ bool runTests(istream &in) {
 }
 ```
 
+### Step 3b: Configure the Python Runner in `init.py`
+If you also solve the problem in Python, write `leetcode/<id>/solution.py` and bind it in `leetcode/<id>/init.py` with explicit type specifiers:
+
+```python
+import sys
+
+from runner import main, run_tests
+from solution import Solution
+
+
+def run_tests_hook(stream):
+    return run_tests(stream, Solution(), "myMethod", arg_types=["string", "int"], return_type="int")
+
+
+if __name__ == "__main__":
+    sys.exit(main(run_tests_hook))
+```
+
+Both harnesses read the same `testcases.txt`, so the cases are written once.
+
 ### Step 4: Populate `testcases.txt`
 Specify total cases on line 1, followed by alternating input arguments and expected outputs:
 ```text
@@ -83,6 +109,9 @@ Build and test your solution:
 ```bash
 make leetcode/<id>
 ./build/leetcode/<id>/app leetcode/<id>/testcases.txt
+
+# Python (shares testcases.txt)
+make py-leetcode/<id>
 ```
 
 ---
@@ -90,6 +119,6 @@ make leetcode/<id>
 ## 3. Managing Multiple Versions
 
 When working on a problem, keep your attempts for comparison:
-1. Save earlier attempts as `solution_v1_bruteforce.cpp`, `solution_v2_memoization.cpp`, etc.
-2. Keep the latest optimal/accepted code in `solution.cpp` (since `init.cpp` includes `solution.cpp`).
+1. Save earlier attempts as `solution_v1_bruteforce.cpp`, `solution_v2_memoization.cpp`, etc. (or `.py` for Python).
+2. Keep the latest optimal/accepted code in `solution.cpp` / `solution.py` (since `init.cpp` / `init.py` import it).
 3. Document time/space complexity and verdict comparison in the problem's `README.md`.

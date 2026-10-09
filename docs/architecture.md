@@ -6,12 +6,12 @@ This document describes how code is organized, compiled, and executed across thi
 
 ## 1. High-Level Design
 
-The repository is structured so that **problem solutions remain 100% clean and identical to LeetCode submissions**, with zero boilerplate or testing clutter in `solution.cpp`.
+The repository is structured so that **problem solutions remain 100% clean and identical to LeetCode submissions**, with zero boilerplate or testing clutter in `solution.cpp` / `solution.py`.
 
-Each problem directory contains four primary files:
-- **`solution.cpp`**: Contains the raw `Solution` class with the target method.
-- **`init.cpp`**: A lightweight glue file that hooks `solution.cpp` into the generic test runner.
-- **`testcases.txt`**: Raw test cases (number of cases, input arguments, and expected outputs).
+A problem can be solved in either or both languages. Each problem directory contains:
+- **`solution.cpp` / `solution.py`**: The raw `Solution` class with the target method.
+- **`init.cpp` / `init.py`**: A lightweight glue file that hooks the solution into the generic test runner for its language.
+- **`testcases.txt`**: Raw test cases (number of cases, input arguments, and expected outputs) — shared by both harnesses.
 - **`README.md`**: Problem metadata, time/space complexity, and version history.
 
 ---
@@ -142,12 +142,59 @@ Because the file declares its own includes, it compiles identically in the local
 
 ---
 
-## 5. Continuous Integration (`.github/workflows/cpp.yml`)
+## 5. Python Support (`runner.py` + `init.py`)
 
-The repository runs an automated CI pipeline on pushes to `main` and pull requests targeting `main`:
+[`runner.py`](../runner.py) is the Python counterpart of `runner.h`, reproducing the same contract: read `N`, read two lines per case, tokenize the args line (the whole line for a single `string` argument), coerce tokens by declared type, invoke the method, compare, and print `Case i: PASS` / `Case i: FAIL (Got: ..., Expected: ...)` followed by `<passed>/<n> passed`.
 
-1. **Change Detection**: Identifies modified `solution.cpp` files using `git diff`:
+### A. Type Specifiers
+Because Python has no static signature to deduce, `init.py` declares the argument and return types using the same type names as `init.cpp`:
+
+```python
+import sys
+
+from runner import main, run_tests
+from solution import Solution
+
+
+def run_tests_hook(stream):
+    return run_tests(stream, Solution(), "isValid", arg_types=["string"], return_type="bool")
+
+
+if __name__ == "__main__":
+    sys.exit(main(run_tests_hook))
+```
+
+Supported specifiers: `int`, `long`, `float`, `double`, `bool`, `char`, `string`, `vector<T>` (nesting supported), `ListNode`, `TreeNode`, and `void` (return only — the first argument is mutated in place and compared to the expected line).
+
+### B. Comparison
+Identical semantics to the C++ harness: floats within `1e-5`, vectors matched exactly first with a sorted (order-insensitive) fallback, and structural `ListNode` / `TreeNode` equality.
+
+### C. Entry Point (`main`)
+`runner.main(run_hook)` mirrors `main` in `runner.h`: it reads the testcases path from `argv` (default `testcases.txt`), opens it, and returns `0` iff every case passed.
+
+### D. Running
+The Python harness needs the repo root on the import path (the counterpart of C++'s `-I.`):
+
+```bash
+# via the Makefile (sets PYTHONPATH automatically)
+make py-leetcode/20
+
+# manually
+PYTHONPATH=. python3 leetcode/20/init.py leetcode/20/testcases.txt
+```
+
+### E. Makefile Targets
+- `make py-<dir>` (e.g. `make py-leetcode/20`): runs `<dir>/init.py` against `<dir>/testcases.txt`.
+- `make py-all`: runs every discovered `init.py`.
+
+---
+
+## 6. Continuous Integration (`.github/workflows/{cpp,python}.yml`)
+
+The repository runs an automated CI pipeline on pushes to `main` and pull requests targeting `main`, one workflow per language:
+
+1. **Change Detection**: Identifies modified source files using `git diff` (`solution.cpp` for `cpp.yml`, `solution.py` for `python.yml`):
    - For pull requests: compares against `origin/${{ github.base_ref }}`.
    - For pushes: compares `${{ github.event.before }}` to `${{ github.sha }}`.
-2. **Selective Build**: Only runs `make "$folder"` for directories containing modified solutions.
-3. **Execution**: Runs `./build/$folder/app "$folder/testcases.txt"` to ensure all test cases pass before PRs can be merged.
+2. **Selective Build / Run**: `cpp.yml` runs `make "$folder"` for each changed directory, then executes `./build/$folder/app "$folder/testcases.txt"`. `python.yml` runs `make "py-$folder"`, which executes the Python harness against the same testcases file.
+3. Both fail the job if any test case fails (the harness exits non-zero), so PRs cannot merge with a broken solution.

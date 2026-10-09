@@ -1,0 +1,69 @@
+name: Run Added/Modified Python files
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**/solution.py'
+      - '**/testcases.txt'
+      - '**/init.py'
+      - '!templates/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**/solution.py'
+      - '**/testcases.txt'
+      - '**/init.py'
+      - '!templates/**'
+
+jobs:
+  run-python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Find the added/modified Python files
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            git fetch origin "${{ github.base_ref }}" --depth=1
+            FILES=$(git diff --name-only --diff-filter=ACMR \
+              "origin/${{ github.base_ref }}...HEAD" -- '**/solution.py' ':(exclude)templates/**')
+          else
+            FILES=$(git diff --name-only --diff-filter=ACMR \
+              "${{ github.event.before }}" "${{ github.sha }}" -- '**/solution.py' ':(exclude)templates/**')
+          fi
+
+          echo "Changed Folders: "
+
+          echo "folders<<EOF" >> $GITHUB_OUTPUT
+          while IFS= read -r file; do
+              if [ -n "$file" ]; then
+                  dir_path=$(dirname "$file")
+                  relative_path=$(realpath --relative-to=. "$dir_path")
+                  if [ "$relative_path" != "templates" ] && [ "$relative_path" != "." ]; then
+                      echo "$relative_path"
+                      echo "$relative_path" >> $GITHUB_OUTPUT
+                  fi
+              fi
+          done <<< "$FILES"
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Run the added/modified Python test suites
+        run: |
+          while IFS= read -r folder; do
+            if [ -n "$folder" ]; then
+              make "py-$folder"
+              echo "Executed $folder"
+              echo "----------"
+            fi
+          done <<< "${{ steps.changed.outputs.folders }}"

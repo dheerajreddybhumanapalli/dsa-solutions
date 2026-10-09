@@ -7,7 +7,7 @@ Welcome to the internal documentation for the **DSA Solutions** practice reposit
 ## Documentation Index
 
 - **[System Architecture](architecture.md)**
-  Deep dive into how `runner.h`, `init.cpp`, and `solution.cpp` connect, how the `Makefile` builds binaries, and how GitHub Actions CI tests changes.
+  Deep dive into how `runner.h` / `runner.py`, `init.cpp` / `init.py`, and `solution.cpp` / `solution.py` connect, how the `Makefile` builds and runs them, and how GitHub Actions CI tests changes.
 - **[Testcase Format & Parsing](testcase-format.md)**
   Detailed specification of `testcases.txt`, supported input/output data types, argument tokenization rules, and parsing gotchas.
 - **[Workflow Guide](workflow-guide.md)**
@@ -20,21 +20,23 @@ Welcome to the internal documentation for the **DSA Solutions** practice reposit
 ```
                     ┌─────────────────────────┐
                     │   templates/            │  (Starter files)
-                    │   - init.cpp            │
-                    │   - solution.cpp        │
+                    │   - init.cpp / init.py  │
+                    │   - solution.cpp / .py  │
                     │   - testcases.txt       │
                     └───────────┬─────────────┘
                                 │ copy to create problem
                                 ▼
-┌──────────────────────┐   ┌───────────────────────────┐
-│ runner.h             │   │ leetcode/<id>/            │
-│ - ValueParser<T>     ├──►│ - init.cpp                │ (Harness entry)
-│ - parseArgsTuple     │   │ - solution.cpp            │ (Your LeetCode class)
-│ - executeHarness     │   │ - testcases.txt           │ (Input & Expected)
-│ - main() entry       │   └─────────────┬─────────────┘
-└──────────────────────┘                 │
-                                         ▼ (make leetcode/<id>)
-                           ┌───────────────────────────┐
-                           │ build/leetcode/<id>/app   │ (Single compiled binary)
-                           └───────────────────────────┘
+┌───────────────────────┐   ┌───────────────────────────┐
+│ runner.h              │   │ leetcode/<id>/            │
+│ - ValueParser<T>      ├──►│ - init.cpp / init.py      │ (Harness entry)
+│ - executeHarness      │   │ - solution.cpp / .py      │ (Your LeetCode class)
+│ - main() entry        │   │ - testcases.txt           │ (Input & Expected)
+│ runner.py             │   └─────────────┬─────────────┘
+│ - parse_value         │                 │
+│ - run_tests / main    │     ┌───────────┴───────────┐
+└───────────────────────┘     ▼ (make leetcode/<id>)  ▼ (make py-leetcode/<id>)
+                    ┌───────────────────────┐  ┌───────────────────────────┐
+                    │ build/leetcode/<id>/  │  │ python3 init.py           │
+                    │ app (compiled binary) │  │ testcases.txt (Python)    │
+                    └───────────────────────┘  └───────────────────────────┘
 ```

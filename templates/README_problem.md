@@ -5,7 +5,7 @@
 | Difficulty | Easy / Medium / Hard |
 | Topics |  |
 | Link | https://leetcode.com/problems/<slug>/ |
-| Languages | C++ |
+| Languages | C++ / Python |
 
 ## Problem (one-liner)
 
@@ -27,6 +27,9 @@
 ```bash
 # from repo root
 clang++ -std=c++17 -Wall -Wextra -O2 leetcode/<id>-<slug>/solution.cpp -o build/<id> && ./build/<id>
+
+# Python (shares the same testcases.txt)
+make py-leetcode/<id>
 ```
 
 ## Takeaway
